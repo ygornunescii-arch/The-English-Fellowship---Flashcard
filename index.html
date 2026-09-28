@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The English Fellowship · Flashcards de Setembro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#f3f1ee;--ink:#1c1c1c;--mute:#6b6b6b;--front:#dfe9e2;--back:#dde6f1;--line:#c9c9c4;--ok:#2f7d4f;--rev:#b4443a;--btn:#1c1c1c;--btnink:#f3f1ee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#191919;--ink:#f0f0ee;--mute:#9a9a96;--front:#263b31;--back:#233650;--line:#3a3a38;--ok:#5fc089;--rev:#e5786d;--btn:#f0f0ee;--btnink:#191919}}
+:root[data-theme="dark"]{--bg:#191919;--ink:#f0f0ee;--mute:#9a9a96;--front:#263b31;--back:#233650;--line:#3a3a38;--ok:#5fc089;--rev:#e5786d;--btn:#f0f0ee;--btnink:#191919}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:28px 18px 40px}
+h1{font-size:1.5rem;font-weight:800;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 20px;font-size:.95rem}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.stats{display:flex;justify-content:space-between;color:var(--mute);font-size:.85rem;margin-bottom:16px}
+.scene{perspective:1200px;cursor:pointer;outline:none}
+.card{position:relative;height:340px;transform-style:preserve-3d;transition:transform .5s}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:26px;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.f{background:var(--front);align-items:center;text-align:center}
+.f b{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:800;line-height:1.15;overflow-wrap:anywhere}
+.f small{margin-top:14px;color:var(--mute)}
+.b{background:var(--back);transform:rotateY(180deg);gap:14px}
+.b p{margin:0;line-height:1.45}
+.b .en{font-weight:600;font-size:1.1rem}
+.b .ex{color:var(--mute);font-style:italic}
+.row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+button{font:inherit;font-weight:600;border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px 16px;border-radius:10px;cursor:pointer;flex:1;min-width:110px}
+button:focus-visible,.scene:focus-visible{outline:3px solid var(--ok);outline-offset:2px}
+.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.rev{background:var(--rev);border-color:var(--rev);color:#fff}
+.nav button{background:var(--btn);color:var(--btnink);border-color:var(--btn)}
+.spk{flex:none;min-width:0;width:auto;padding:6px 10px;font-size:.9rem;margin-top:10px;align-self:flex-start}
+.f .spk{align-self:center}
+.end{text-align:center;padding:60px 10px}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Flashcards · Setembro 2026</h1>
+<p class="sub">Toque no cartão para virar. Espaço vira, setas navegam.</p>
+<div class="bar"><i id="pb"></i></div>
+<div class="stats"><span id="pos"></span><span id="sc"></span></div>
+<div id="stage"></div>
+<div class="row nav" id="nav">
+<button id="prev">Anterior</button><button id="next">Próximo</button>
+</div>
+<div class="row">
+<button class="rev" id="bRev">Revisar</button><button class="ok" id="bOk">Já sei</button>
+</div>
+<div class="row">
+<button id="shuf">Embaralhar</button><button id="only">Só os que preciso revisar</button><button id="reset">Recomeçar</button>
+</div>
+</main>
+<script>
+var ALL=[
+["AGAINST ALL ODDS","Despite facing many difficulties or having very little chance of success.","Apesar de todas as dificuldades; contra todas as probabilidades.","Against all odds, the underdog won the championship."],
+["GO OVERBOARD","To do or spend much more than is necessary or reasonable.","Exagerar, gastar ou fazer muito mais do que o necessário.","He went overboard with the decorations for the party."],
+["SMIRK","A small smile that can show satisfaction, confidence, irony, or superiority.","Sorriso de canto; sorrisinho.","He smirked after winning the argument."],
+["MAKE A MOUNTAIN OUT OF A MOLEHILL","To make a small problem seem much bigger or more serious than it is.","Fazer tempestade em copo d'água.","Don't make a mountain out of a molehill. It's not a big deal."],
+["COME IN HANDY","To be useful, especially when you need something.","Ser útil; vir a calhar.","Keep some cash with you. It might come in handy."],
+["WHATSOEVER","At all; of any kind (used for emphasis).","De forma alguma; de qualquer tipo.","I don't want to hear any excuses whatsoever."],
+["ABOUT TIME","Something should have happened sooner.","Já estava na hora; até que enfim.","You finally finished the project? About time!"],
+["NIPPY","Slightly cold, especially in an unpleasant way.","Friozinho; frio desconfortável.","It's a bit nippy outside, so you might want to bring a jacket."],
+["ENDURANCE","The ability to continue doing something difficult for a long time without giving up.","Resistência; perseverança.","Building endurance takes time, patience, and consistent practice."],
+["INSIDIOUS","Gradually harmful or dangerous, in a way that is difficult to notice.","Insidioso; que causa dano de forma gradual e difícil de perceber.","The effects of stress can be insidious and difficult to notice at first."],
+["UNDERDOG","A person or team not expected to win or succeed.","Azarão.","The underdog surprised everyone and won the championship."],
+["UNIQUE","Different from everything else; one of a kind.","Único; singular; incomum.","Everyone has a unique way of learning English."],
+["AMATEUR","A person who does an activity for pleasure, not as a paid job.","Amador.","He started winning competitions as an amateur."],
+["PROFESSIONAL","Someone who is paid to do a job or activity.","Profissional.","In 1996, Woods became a professional golfer."],
+["STROKE","A single hit of the ball in golf.","Tacada.","He won by 12 strokes."],
+["CHAMPIONSHIP","A competition to find the best player or team.","Campeonato.","He has won 15 major championships."],
+["ACHIEVEMENT","Something difficult that has been done successfully.","Conquista.","This achievement became known as the Tiger Slam."],
+["INJURY","Physical damage or harm to the body.","Lesão.","He had several injuries and spent periods away from golf."],
+["COMEBACK","A return to success after a period of difficulty.","Retorno; reviravolta.","It was one of the biggest comebacks of his career."],
+["CHARITY","An organization or activity that helps people in need.","Caridade.","Woods is also involved in business and charity work."],
+["DETERMINATION","A firm decision to keep trying despite difficulties.","Determinação.","His career shows the importance of talent, hard work, endurance, and determination."]
+];
+var deck=ALL.slice(),i=0,status={},flipped=false;
+var $=function(id){return document.getElementById(id)};
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function best(){var v=(window.speechSynthesis.getVoices()||[]).filter(function(x){return /^en/i.test(x.lang)});var b=null,bs=-99;v.forEach(function(x){var n=x.name,sc=0;if(/en[-_]US/i.test(x.lang))sc+=2;if(/natural|neural|online/i.test(n))sc+=4;if(/premium|enhanced/i.test(n))sc+=4;if(/google us english/i.test(n))sc+=2;if(/samantha|aria|jenny|ava|allison|zoe|evan|nicky/i.test(n))sc+=2;if(/compact|espeak|novelty|whisper|bells|zarvox/i.test(n))sc-=4;if(sc>bs){bs=sc;b=x}});return b}
+function say(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.92;var v=best();if(v){u.voice=v;u.lang=v.lang}speechSynthesis.speak(u)}
+if(window.speechSynthesis){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=function(){}}
+function spk(t){return '<button class="spk" data-t="'+esc(t)+'" aria-label="Ouvir">🔊 Ouvir</button>'}
+function render(){
+ var st=$("stage");
+ if(!deck.length){st.innerHTML='<div class="end"><h1>Nada para revisar 🎉</h1><p class="sub">Você marcou tudo como "Já sei".</p></div>';$("pos").textContent="";updateStats();return}
+ var c=deck[i];flipped=false;
+ st.innerHTML='<div class="scene" id="scene" tabindex="0" role="button" aria-label="Virar cartão"><div class="card" id="card"><div class="face f"><b>'+esc(c[0])+'</b><small>toque para ver o significado</small>'+spk(c[0])+'</div><div class="face b"><p class="en">'+esc(c[1])+'</p>'+spk(c[1])+'<p>🇧🇷 '+esc(c[2])+'</p><p class="ex">“'+esc(c[3])+'”</p>'+spk(c[3])+'</div></div></div>';
+ $("scene").onclick=flip;
+ Array.prototype.forEach.call(document.querySelectorAll(".spk"),function(b){b.onclick=function(e){e.stopPropagation();say(b.getAttribute("data-t"))}});
+ $("pos").textContent="Cartão "+(i+1)+" de "+deck.length;
+ updateStats();
+}
+function flip(){flipped=!flipped;$("card").classList.toggle("flip",flipped)}
+function updateStats(){
+ var k=0,r=0;ALL.forEach(function(c){var s=status[c[0]];if(s==="ok")k++;if(s==="rev")r++});
+ $("sc").textContent="Sei: "+k+" · Revisar: "+r;
+ $("pb").style.width=(k/ALL.length*100)+"%";
+}
+function go(d){if(!deck.length)return;i=(i+d+deck.length)%deck.length;render()}
+function mark(s){if(!deck.length)return;status[deck[i][0]]=s;go(1)}
+$("prev").onclick=function(){go(-1)};
+$("next").onclick=function(){go(1)};
+$("bOk").onclick=function(){mark("ok")};
+$("bRev").onclick=function(){mark("rev")};
+$("shuf").onclick=function(){for(var a=deck.length-1;a>0;a--){var j=Math.floor(Math.random()*(a+1));var t=deck[a];deck[a]=deck[j];deck[j]=t}i=0;render()};
+$("only").onclick=function(){deck=ALL.filter(function(c){return status[c[0]]!=="ok"});i=0;render()};
+$("reset").onclick=function(){status={};deck=ALL.slice();i=0;render()};
+document.addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight")go(1);else if(e.key==="ArrowLeft")go(-1);
+ else if((e.key===" "||e.key==="Enter")&&document.activeElement.id==="scene"){e.preventDefault();flip()}
+});
+render();
+</script>
+</body>
+</html>
